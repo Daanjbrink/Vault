@@ -12,6 +12,8 @@ struct clientData {
 	pthread_t thread;
 	int clientfd;
 	struct sockaddr_in sockaddr;
+	char username[32];
+	char password[32];
 	char auth;
 };
 

@@ -20,7 +20,7 @@ void Log(const char *format, ...)
 
 	va_list list;
 	va_start(list, format);
-	vfprintf(fp, format, list);
+	vprintf(format, list);
 	va_end(list);
 
 	fclose(fp);
@@ -38,4 +38,35 @@ void SendC(struct clientData *client, char reason)
 			break;
 	}
 	send(client->clientfd, msg, sizeof(msg), 0);
+}
+
+int mkdirR(const char *path)
+{
+    const size_t len = strlen(path);
+    char _path[256];
+    char *p;
+
+    errno = 0;
+
+    if (len > sizeof(_path)-1) {
+        errno = ENAMETOOLONG;
+        return -1;
+    }
+    strcpy(_path, path);
+
+    for(p = _path + 1; *p; p++){
+        if(*p == '/'){
+            *p = '\0';
+            if(mkdir(_path, S_IRWXU) != 0)
+                if (errno != EEXIST)
+                    return -1;
+            *p = '/';
+        }
+    }
+
+    if(mkdir(_path, S_IRWXU) != 0)
+        if (errno != EEXIST)
+            return -1;
+
+    return 0;
 }

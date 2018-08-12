@@ -5,6 +5,9 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <errno.h>
 #include <arpa/inet.h>
 
 #include "server.h"
@@ -19,5 +22,6 @@ void perr(const char *s);
 void Sleep(int i);
 void Log(const char *format, ...);
 void SendC(struct clientData *client, char reason);
+int mkdirR(const char *path);
 
 #endif
