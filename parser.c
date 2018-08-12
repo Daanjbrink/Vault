@@ -4,6 +4,8 @@ void parse(struct clientData *client, char *buffer)
 {
 	// 00 - auth
 	// 01 - list dir
+	// 02 - upload
+	// 03 - download
 	printf("Received from socket %d: %s\nID: 0x%02x\n", client->clientfd, buffer, buffer[0]);
 
 	switch(buffer[0]){
@@ -30,23 +32,7 @@ void parse(struct clientData *client, char *buffer)
 				SendC(client, DECLINE);
 				break;
 			}
-			struct dirent *de;
-
-			DIR *dir;
-
-			if((dir = opendir("vault")) == NULL){
-				SendC(client, DECLINE);
-				break;
-			}
-
-			while((de = readdir(dir)) != NULL){
-				if(strcmp(".", de->d_name) == 0 || strcmp("..", de->d_name) == 0)
-					continue;
-				send(client->clientfd, de->d_name, strlen(de->d_name), 0);
-			}
-			SendC(client, CONFIRM);
-
-			closedir(dir);
+			
 			break;
 	}
 }

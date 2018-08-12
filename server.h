@@ -9,9 +9,9 @@
 #include <pthread.h>
 
 struct clientData {
-        pthread_t thread;
-        int clientfd;
-        struct sockaddr_in sockaddr;
+	pthread_t thread;
+	int clientfd;
+	struct sockaddr_in sockaddr;
 	char auth;
 };
 
