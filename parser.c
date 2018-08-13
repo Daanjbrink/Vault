@@ -47,10 +47,12 @@ void parse(struct clientData *client, char *buffer)
 			}
 
 			char filepath[256];
+			char contentchk = {'..','../','/..','/../'};
 
 			strncpy(filepath, &buffer[1], sizeof(filepath)-1);
 
-			if(strncmp(filepath, ".", 1) == 0 || strncmp(filepath, "..", 2) == 0 || strncmp(filepath, "/", 1) == 0){
+
+			if(strncmp(filepath, ".", 1) == 0 || (memchr(contentchk,filepath,sizeof(filepath)))){
 				Log("Fishy upload attempt from %s@%s\n", client->username, ip(client));
 				SendC(client, DECLINE);
 				break;
@@ -89,7 +91,7 @@ void parse(struct clientData *client, char *buffer)
 				}
 
 				if(received == 1)
-					if(buffer[0] = 0xFF)
+					if(buffer[0] == 0xFF)
 						break;
 
 				// Write buffer to file
