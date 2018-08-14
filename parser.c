@@ -53,7 +53,7 @@ void parse(struct clientData *client, char *buffer)
 			Log("Upload file: %s: %s\n", client->username, filepath);
 
 			// Prevent path traversal
-			if(strncmp(filepath, ".", 1) == 0 || strstr(filepath, "..") != NULL){
+			if(strncmp(filepath, ".", 1) == 0 || strstr(filepath, "..") != NULL || strncmp(filepath, "/", 1) == 0){
 				Log("Fishy upload attempt from %s@%s\n", client->username, ip(client));
 				SendC(client, DECLINE);
 				break;
@@ -61,12 +61,12 @@ void parse(struct clientData *client, char *buffer)
 
 			// Check if path consists of directories
 			char *dir = strrchr(filepath, '/');
-			if(dir != NULL){				
+			if(dir != NULL){
 				int m = strlen(dir)-1; // Do not count the '/'
 				int n = dir - filepath; // Beginning of string till last subdir
 				char filename[m+1]; // Null terminator
 				char directory[n+1];
-				
+
 				memset(filename, 0, sizeof(filename));
 				memset(directory, 0, sizeof(directory));
 
