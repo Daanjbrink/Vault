@@ -13,17 +13,17 @@ void Sleep(int i)
 
 void Log(const char *format, ...)
 {
-	FILE *fp;
+	//FILE *fp;
 
-	if((fp = fopen("log.txt", "a")) == NULL)
-		perr("Error writing to log file");
+	//if((fp = fopen("log.txt", "a")) == NULL)
+		//perr("Error writing to log file");
 
 	va_list list;
 	va_start(list, format);
 	vprintf(format, list);
 	va_end(list);
 
-	fclose(fp);
+	//fclose(fp);
 }
 
 void SendC(struct clientData *client, char reason)

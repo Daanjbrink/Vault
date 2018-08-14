@@ -16,8 +16,8 @@ void parse(struct clientData *client, char *buffer)
 				break;
 			}
 
-			char username[32];
-			char password[32];
+			char username[32] = {0};
+			char password[32] = {0};
 
 			strncpy(username, &buffer[1], sizeof(username)-1);
 			strncpy(password, &buffer[1+strlen(username)+1], sizeof(password)-1);
@@ -27,7 +27,6 @@ void parse(struct clientData *client, char *buffer)
 			if(strcmp(username, "admin") == 0 && strcmp(password, "admin2") == 0){
 				SendC(client, CONFIRM);
 				strcpy(client->username, username);
-				strcpy(client->password, password);
 				client->auth = 1;
 				Log("User %s logged in from %s:%d\n", username, ip(client), port(client));
 			} else {
@@ -46,57 +45,70 @@ void parse(struct clientData *client, char *buffer)
 				break;
 			}
 
-			char filepath[256];
+			char filepath[256] = {0};
 
+			// Filepath can't be larger than 256-2
 			strncpy(filepath, &buffer[1], sizeof(filepath)-1);
 
+			Log("Upload file: %s: %s\n", client->username, filepath);
+
+			// Prevent path traversal
 			if(strncmp(filepath, ".", 1) == 0 || strstr(filepath, "..") != NULL){
 				Log("Fishy upload attempt from %s@%s\n", client->username, ip(client));
 				SendC(client, DECLINE);
 				break;
 			}
 
+			// Check if path consists of directories
 			char *dir = strrchr(filepath, '/');
-			if(dir != NULL){
-				int n = dir - filepath;
-				int m = strlen(dir)-1;
-				char filename[m+1];
+			if(dir != NULL){				
+				int m = strlen(dir)-1; // Do not count the '/'
+				int n = dir - filepath; // Beginning of string till last subdir
+				char filename[m+1]; // Null terminator
 				char directory[n+1];
+				
+				memset(filename, 0, sizeof(filename));
+				memset(directory, 0, sizeof(directory));
 
-				strncpy(filename, filepath+n+1, sizeof(filename)-1); // Exclude the /
+				strncpy(filename, filepath+n+1, sizeof(filename)-1); // filepath + n includes the '/'
 				strncpy(directory, filepath, sizeof(directory)-1);
 
+				// Create subdirectories
 				mkdirR(directory);
 			}
 
+			// Create the file
 			FILE *fp;
 			if((fp = fopen(filepath, "w")) == 0){
 				Log("Error opening upload file\n");
 				break;
 			}
 
+			// Send confirmation the server is ready for transmission
+			SendC(client, CONFIRM);
+
 			int received = 0;
 			char buffer[4096];
 
 			while(1){
-				// Reset buffer
-				memset(buffer, '\0', sizeof(buffer));
-
 				// Receive file
 				if((received = recv(client->clientfd, buffer, sizeof(buffer), 0)) <= 0){
 					Close(client);
 					break;
 				}
 
-				if(received == 1)
-					if(buffer[0] == 0xFF)
-						break;
+				// Signal ending of transmission
+				if(received == 1 && buffer[0] == 0xFF){
+					break;
+				}
 
 				// Write buffer to file
 				fwrite(buffer, received, 1, fp);
 			}
-
 			fclose(fp);
+
+			// Notify client the file is received
+			SendC(client, CONFIRM);
 			break;
 	}
 }

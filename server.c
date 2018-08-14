@@ -54,7 +54,7 @@ void *HandleConnection(void *clientStruct)
 		// Don't use too much cpu
 		Sleep(100);
 
-		char buffer[256];
+		char buffer[256] = {0};
 
 		// If the client shutdown or closes his connection
 		if(recv(client->clientfd, buffer, sizeof(buffer)-1, 0) <= 0){
