@@ -10,7 +10,6 @@
 #include "server.h"
 #include "utils.h"
 
-
-char listdir(struct clientData *client);
+void listdir(struct clientData *client);
 
 #endif

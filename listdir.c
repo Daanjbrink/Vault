@@ -1,8 +1,7 @@
 #include "listdir.h"
 #include "server.h"
 
-
-// Defines the base directory of the vault in this case "./testdir/"
+// Defines the base directory of the vault
 char basedir[]= "./testdir/";
 struct clientData *user;
 
@@ -12,7 +11,7 @@ int callback(const char *filepath, const struct stat *info, const int typeflag, 
 	return 0;
 }
 
-char listdir(struct clientData *client){
+void listdir(struct clientData *client){
 	user = client;
-	return nftw(basedir, callback, 15, FTW_PHYS);
+	nftw(basedir, callback, 15, FTW_PHYS);
 }

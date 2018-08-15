@@ -8,7 +8,6 @@
 #include "utils.h"
 #include "listdir.h"
 
-
 void parse(struct clientData *client, char *buffer);
 
 #endif
