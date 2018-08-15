@@ -38,6 +38,7 @@ void parse(struct clientData *client, char *buffer)
 				SendC(client, DECLINE);
 				break;
 			}
+			listdir(client);
 			break;
 		case 0x02:
 			if (!client->auth){

@@ -42,6 +42,7 @@ void AcceptClients()
 
 		// Give it it's own thread
 		pthread_create(&client->thread, NULL, HandleConnection, (void *)client);
+		pthread_detach(client->thread);
 	}
 }
 
