@@ -15,5 +15,4 @@ int callback(const char *filepath, const struct stat *info, const int typeflag, 
 char listdir(struct clientData *client){
 	user = client;
 	return nftw(basedir, callback, 15, FTW_PHYS);
-
 }
