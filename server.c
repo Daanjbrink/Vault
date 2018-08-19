@@ -11,7 +11,7 @@ int InitServer()
 	sa.sin_addr.s_addr = INADDR_ANY;
 
 	int enable = 1;
-	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+	if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) == -1)
 		perr("Error setting socket options\n");
 
 	if(bind(sockfd, (struct sockaddr *) &sa, sizeof(sa)) == -1)

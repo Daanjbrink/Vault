@@ -7,6 +7,7 @@
 #include "server.h"
 #include "utils.h"
 #include "listdir.h"
+#include "files.h"
 
 void parse(struct clientData *client, char *buffer);
 
