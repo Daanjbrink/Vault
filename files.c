@@ -109,10 +109,3 @@ int download(struct clientData *client, char *path)
 
 	return 0;
 }
-
-
-
-
-
-
-
