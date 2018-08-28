@@ -40,13 +40,13 @@ void parse(struct clientData *client, char *buffer)
 				break;
 			}
 			SendC(client, CONFIRM);
-			
+
 			if(listdir(client) == 0)
 				SendC(client, CONFIRM); // Function endend succesfully
 			else
 				SendC(client, DECLINE);
 			break;
-		// Upload file
+		// Upload file to client
 		case 0x02:
 			if (!client->auth){
 				SendC(client, DECLINE);
@@ -55,6 +55,19 @@ void parse(struct clientData *client, char *buffer)
 			SendC(client, CONFIRM);
 
 			if(upload(client, buffer) == 0)
+				SendC(client, CONFIRM); // Function endend succesfully
+			else
+				SendC(client, DECLINE);
+			break;
+		// Download file from client
+		case 0x03:
+			if (!client->auth){
+				SendC(client, DECLINE);
+				break;
+			}
+			SendC(client, CONFIRM);
+
+			if(download(client, buffer) == 0)
 				SendC(client, CONFIRM); // Function endend succesfully
 			else
 				SendC(client, DECLINE);

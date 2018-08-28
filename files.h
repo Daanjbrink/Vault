@@ -7,6 +7,7 @@
 #include "server.h"
 #include "utils.h"
 
-int upload(struct clientData *client, char *buffer);
+int upload(struct clientData *client, char *path);
+int download(struct clientData *client, char *path);
 
 #endif
