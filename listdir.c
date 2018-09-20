@@ -6,7 +6,7 @@ char basedir[]= "./testdir/";
 struct clientData *user;
 
 int callback(const char *filepath, const struct stat *info, const int typeflag, struct FTW *pathinfo){
-	send(user->clientfd, filepath+strlen(basedir), strlen(filepath)-strlen(basedir),0);
+	send(user->clientfd, filepath+strlen(basedir), strlen(filepath)-strlen(basedir), 0);
 	return 0;
 }
 
