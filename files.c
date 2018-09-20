@@ -98,7 +98,7 @@ int download(struct clientData *client, char *path)
 		if((readd = fread(buffer, 1, sizeof(buffer), fp)) <= 0)
 			break;
 
-		// Receive file
+		// Send file
 		if(send(client->clientfd, buffer, readd, 0) <= 0){
 			Close(client);
 			return -1;
