@@ -15,8 +15,8 @@
 #define ip(x) inet_ntoa(x->sockaddr.sin_addr)
 #define port(x) ntohs(x->sockaddr.sin_port)
 
-#define CONFIRM 0
-#define DECLINE 1
+#define CONFIRM 0x0
+#define DECLINE 0x1
 
 void perr(const char *s);
 void Sleep(int i);

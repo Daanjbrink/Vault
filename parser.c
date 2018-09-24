@@ -7,7 +7,6 @@ void parse(struct clientData *client, char *buffer)
 	// 02 - upload
 	// 03 - download
 	printf("Received from socket %d: %s\nID: 0x%02x\n", client->clientfd, buffer, buffer[0]);
-
 	switch(buffer[0]){
 		// Authenticate
 		case 0x00:
