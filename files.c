@@ -46,7 +46,10 @@ int upload(struct clientData *client, char *path)
 
 	int received = 0;
 	char buffer[4096];
-	printf("filepath upload: %s\n", filepath);
+
+	// Notify the client that he can send
+	sendC(client->clientfd, CONFIRM);
+
 	while(1){
 		// Receive file
 		if((received = recv(client->clientfd, buffer, sizeof(buffer), 0)) <= 0){
